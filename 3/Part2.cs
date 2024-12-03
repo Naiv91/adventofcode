@@ -8,11 +8,6 @@ public class Part2(string input)
     {
         string mulEnabled = string.Join(string.Empty, input.Split("do()").Select(l => l.Split("don't").First()));
 
-        var muls = new Regex(@"mul\(\d{1,3},\d{1,3}\)");
-        var digits = new Regex(@"\d{1,}");
-        var matches = muls.Matches(mulEnabled);
-        var sum = matches.Sum(m => int.Parse(digits.Match(m.Value.Split(',').First()).Value) * int.Parse(digits.Match(m.Value.Split(',').Last()).Value));
-
-        Console.WriteLine(sum);
+        Console.WriteLine(Regex.Matches(mulEnabled, @"mul\(\d{1,3},\d{1,3}\)").Sum(m => int.Parse(Regex.Match(m.Value.Split(',').First(), @"\d{1,}").Value) * int.Parse(Regex.Match(m.Value.Split(',').Last(), @"\d{1,}").Value)));
     }
 }
