@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace _2;
+namespace _3;
 
 public class Part2(string input)
 {
