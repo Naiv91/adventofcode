@@ -11,7 +11,6 @@ public class Part2(List<string> input)
             List<List<string>> combos = [];
             GetCombos("", numbers.Count - 1, combos);
 
-
             foreach (var combo in combos)
             {
                 long check = 0;
