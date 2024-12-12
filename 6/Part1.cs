@@ -1,6 +1,4 @@
 ﻿using System.Data;
-using System.Linq;
-using System.Net;
 
 public class Part1(List<string> input)
 {
