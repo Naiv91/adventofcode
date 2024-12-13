@@ -7,7 +7,8 @@ public class Part1(List<string> input)
         Dictionary<char, List<(int x, int y)>> valuePairs = [];
         var grid = input.Select(y => y.Select(x => x).ToList()).ToList();
 
-        Enumerable.Range(0, grid.Count).SelectMany(y => Enumerable.Range(0, grid[0].Count).Select(x => (x, y))).ToList().ForEach(cord => {
+        Enumerable.Range(0, grid.Count).SelectMany(y => Enumerable.Range(0, grid[0].Count).Select(x => (x, y))).ToList().ForEach(cord =>
+        {
             var plant = grid[cord.y][cord.x];
             if (valuePairs.TryGetValue(plant, out var cords))
                 cords.Add((cord.x, cord.y));
@@ -17,81 +18,65 @@ public class Part1(List<string> input)
 
         long price = 0;
 
-        foreach ( var pair in valuePairs )
+        foreach (var pair in valuePairs)
         {
-            Dictionary<string, List<(int x, int y)>> regions = [];
-            int counter = 1;
-            bool first = true;
-
-            string key = "";
-
-            foreach (var cord in pair.Value)
+            while (true)
             {
-                if (first)
-                {
-                    first = false;
-                    key = $"{pair.Key}{counter}";
-                    regions[key] = [cord];
-                }
+                if (pair.Value.Count == 0) break;
 
-                if (!regions[key].Any(c => c == cord))
-                {
+                var cord = pair.Value.FirstOrDefault();
 
-
-                    counter++;
-                    key = $"{pair.Key}{counter}";
-                    regions[key] = [cord];
-                }
-
-                if (cord.x + 1 < grid[cord.y].Count)
-                {
-                    if (grid[cord.y][cord.x + 1] == pair.Key)
-                    {
-                        if (!regions[key].Any(c => c.x == cord.x + 1 && c.y == cord.y))
-                            regions[key].Add((cord.x + 1, cord.y));
-                    }
-                }
-                
-                if (cord.y + 1 < grid.Count)
-                {
-                    if (grid[cord.y + 1][cord.x] == pair.Key)
-                    {
-                        if (!regions[key].Any(c => c.x == cord.x && c.y == cord.y + 1))
-                            regions[key].Add((cord.x, cord.y + 1));
-                    }
-                }
-            }
-
-            foreach (var region in regions)
-            {
-                int area = region.Value.Count;
-                int perimiter = region.Value.Sum(cord => Perimiters(cord, region.Key[0]));
-
+                List<(int x, int y)> connected = CheckNeighbours(cord, pair.Key, []);
+                int area = connected.Count;
+                int perimiter = connected.Sum(cord => Perimiters(cord, pair.Key));
                 price += area * perimiter;
+
+                // Console.WriteLine($"{pair.Key}: {area} * {perimiter} = {area * perimiter}");
+
+                connected.ForEach(item => pair.Value.Remove(item));
+
+                cord = pair.Value.FirstOrDefault();
             }
         }
 
-        (int x, int y) CheckNeighbours((int x, int y) cord, char plant)
+        List<(int x, int y)> CheckNeighbours((int x, int y) cord, char plant, List<(int x, int y)> visited)
         {
-            if (cord.x - 1 >= 0 && cord.x + 1 < grid[cord.y].Count)
-            {
-                if (grid[cord.y][cord.x + 1] != plant)
-                    CheckNeighbours((cord.x + 1, cord.y), plant);
+            if (cord.x + 1 < grid[cord.y].Count)
+                if (!visited.Any(v => v == (cord.x + 1, cord.y)))
+                    if (grid[cord.y][cord.x + 1] == plant)
+                    {
+                        visited.Add(cord);
+                        visited = visited.Union(CheckNeighbours((cord.x + 1, cord.y), plant, visited)).ToList();
+                    }
 
-                if (grid[cord.y][cord.x - 1] != plant)
-                    CheckNeighbours((cord.x - 1, cord.y), plant);
-            }
+            if (cord.x - 1 >= 0)
+                if (!visited.Any(v => v == (cord.x - 1, cord.y)))
+                    if (grid[cord.y][cord.x - 1] == plant)
+                    {
+                        visited.Add(cord);
+                        visited = visited.Union(CheckNeighbours((cord.x - 1, cord.y), plant, visited)).ToList();
+                    }
 
-            if (cord.x - 1 >= 0 && cord.x + 1 < grid[cord.y].Count)
-            {
-                if (grid[cord.y + 1][cord.x] != plant)
-                    CheckNeighbours((cord.x, cord.y + 1), plant);
+            if (cord.y + 1 < grid.Count)
+                if (!visited.Any(v => v == (cord.x, cord.y + 1)))
+                    if (grid[cord.y + 1][cord.x] == plant)
+                    {
+                        visited.Add(cord);
+                        visited = visited.Union(CheckNeighbours((cord.x, cord.y + 1), plant, visited)).ToList();
+                    }
 
-                if (grid[cord.y - 1][cord.x] != plant)
-                    CheckNeighbours((cord.x, cord.y + 1), plant);
-            }
+            if (cord.y - 1 >= 0)
+                if (!visited.Any(v => v == (cord.x, cord.y - 1)))
+                    if (grid[cord.y - 1][cord.x] == plant)
+                    {
+                        visited.Add(cord);
+                        visited = visited.Union(CheckNeighbours((cord.x, cord.y - 1), plant, visited)).ToList();
+                    }
 
-            return cord;
+            if (!visited.Any(v => v == cord))
+                visited.Add(cord);
+
+            return visited;
         }
 
         Console.WriteLine(price);
@@ -100,22 +85,29 @@ public class Part1(List<string> input)
         {
             int count = 0;
 
-            if (cord.x + 1 == grid[0].Count || cord.x - 1 < 0)
+            if (cord.x + 1 == grid[0].Count)
             {
                 count++;
             }
             else
             {
-                {
-                    if (grid[cord.y][cord.x + 1] != plant)
-                        count++;
-
-                    if (grid[cord.y][cord.x - 1] != plant)
-                        count++;
-                }
+                if (grid[cord.y][cord.x + 1] != plant)
+                    count++;
             }
 
-            if (cord.y + 1 == grid[0].Count || cord.y - 1 < 0)
+            if (cord.x - 1 < 0)
+            {
+                count++;
+            }
+            else
+            {
+                if (grid[cord.y][cord.x - 1] != plant)
+                    count++;
+            }
+            
+
+
+            if (cord.y + 1 == grid[0].Count)
             {
                 count++;
             }
@@ -124,7 +116,14 @@ public class Part1(List<string> input)
 
                 if (grid[cord.y + 1][cord.x] != plant)
                     count++;
+            }
 
+            if (cord.y - 1 < 0)
+            {
+                count++;
+            }
+            else
+            {
                 if (grid[cord.y - 1][cord.x] != plant)
                     count++;
             }
