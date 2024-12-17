@@ -11,10 +11,8 @@
     public void Solve()
     {
         var robots = input.Select(x => x.Split(' ')).Select(parts => new Robot { P = (x: int.Parse(parts[0].Split('=')[1].Split(',')[0]), y: int.Parse(parts[0].Split('=')[1].Split(',')[1])), V = (x: int.Parse(parts[1].Split('=')[1].Split(',')[0]), y: int.Parse(parts[1].Split('=')[1].Split(',')[1])) }).ToList();
-        string filePath = "output.txt"; // Define the file path
-        using var writer = new StreamWriter(filePath);
 
-        int ticks = 0;
+        int ticks = 1;
         while (true)
         {
             robots.ForEach(robot =>
@@ -50,8 +48,7 @@
                 Console.WriteLine($"\n{new string('#', 43)} Line {ticks} {new string('#', 43)}\n");
                 Console.WriteLine(string.Join(string.Empty, grid.SelectMany(line => string.Join(string.Empty, line) + "\n")) + "\n");
 
-                writer.WriteLine($"\n{new string('#', 43)} Line {ticks} {new string('#', 43)}\n");
-                writer.WriteLine(string.Join(string.Empty, grid.SelectMany(line => string.Join(string.Empty, line) + "\n")) + "\n");
+                return;
             }
 
             ticks++;
