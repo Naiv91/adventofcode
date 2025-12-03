@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+﻿using System.Diagnostics;
 
 namespace _2_25;
 
@@ -8,6 +8,7 @@ public partial class Part1(List<string> input, CancellationToken cancellationTok
 
     public async Task Solve()
     {
+        var stopwatch = Stopwatch.StartNew();
         var ids = input.SelectMany(s => s.Split(',', StringSplitOptions.RemoveEmptyEntries)).ToList();
         Interlocked.Exchange(ref s_invalidSum, 0L);
         
@@ -36,8 +37,9 @@ public partial class Part1(List<string> input, CancellationToken cancellationTok
                 }
             }
         });
-
-        Console.WriteLine($"Invalid passwords count: {s_invalidSum}");
+        stopwatch.Stop();
+        // Console.WriteLine($"Invalid passwords count: {s_invalidSum}");
+        Console.WriteLine($"Parallell elapsed time: {stopwatch.Elapsed}");
     }
 
     // Part1: [System.Text.RegularExpressions.GeneratedRegex(@"^(\d+)\1$")]

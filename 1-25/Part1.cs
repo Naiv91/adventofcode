@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace _1;
+﻿namespace _1;
 
 public class Part1(List<string> input)
 {
@@ -8,8 +6,8 @@ public class Part1(List<string> input)
     public void Solve()
     {
         int dial = 50;
-        int leftAtZero = 0;
-        int everyZeroTick = 0;
+        int part1 = 0;
+        int part2 = 0;
         foreach (var line in input)
         {
             var dir = line[0];
@@ -34,14 +32,14 @@ public class Part1(List<string> input)
 
                 if (dial == 0 || dial == 100)
                 {
-                    everyZeroTick++;
+                    part2++;
                 }
             }
 
             if (dial == 0 || dial == 100)
-                leftAtZero++;
+                part1++;
         }
-        Console.WriteLine($"Part1: {leftAtZero}");
-        Console.WriteLine($"Part2: {everyZeroTick}");
+        Console.WriteLine($"Part1: {part1}");
+        Console.WriteLine($"Part2: {part2}");
     }
 }
