@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 
-namespace _3_25;
+namespace _2;
 
 public class Part2(List<string> input, CancellationToken cancellationToken)
 {

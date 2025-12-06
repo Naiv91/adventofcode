@@ -1,4 +1,4 @@
-﻿using _4_25;
+﻿using _2;
 
 var text = File.ReadAllLines(Directory.GetCurrentDirectory() + "\\input.txt").ToList();
 // new Part1(text).Solve();

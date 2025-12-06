@@ -1,4 +1,4 @@
-﻿namespace _2_25;
+﻿namespace _2;
 
 public class Part2(List<string> input)
 {

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace _2_25;
+namespace _1;
 
 public partial class Part1(List<string> input, CancellationToken cancellationToken)
 {

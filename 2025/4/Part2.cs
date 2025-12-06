@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace _4_25;
+namespace _2;
 
 public partial class Part2(List<string> input)
 {
