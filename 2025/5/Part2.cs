@@ -4,31 +4,35 @@ public partial class Part2(List<string> input)
 {
     public void Solve()
     {
-        var ranges = input.TakeWhile(line => !string.IsNullOrWhiteSpace(line)).Select(line => line.Split('-').Select(x => long.Parse(x)).ToList()).OrderBy(r => r[0]).ToList();
-        var starts = new List<long>();
-        var ends = new List<long>();
+        var ranges = input
+            .TakeWhile(line => string.IsNullOrWhiteSpace(line) || line.Contains('-'))
+            .Where(line => !string.IsNullOrWhiteSpace(line))
+            .Select(line => line.Split('-').Select(x => long.Parse(x)).ToArray())
+            .OrderBy(a => a[0])
+            .ToList();
 
-        CleanRanges();
-        void CleanRanges()
+        var merged = new List<long[]>();
+        foreach (var r in ranges)
         {
-            foreach (var test in ranges.OrderBy(r => r[0]))
+            if (merged.Count == 0)
             {
-                var toCheck = ranges.Where(r => r != test && test[1] >= r[0] && test[1] <= r[1]).OrderBy(r => r[1]).ToList();
-
-                if (toCheck.Count > 0)
-                {
-                    ranges.Add([test[0], toCheck.Last()[1]]);
-                    ranges.Remove(test);
-                    toCheck.ForEach(r => ranges.Remove(r));
-                    CleanRanges();
-                    break;
-                }
-
+                merged.Add(new[] { r[0], r[1] });
+                continue;
             }
 
-            return;
+            var last = merged[^1];
+            if (r[0] <= last[1])
+            {
+                last[1] = Math.Max(last[1], r[1]);
+            }
+            else
+            {
+                merged.Add([r[0], r[1]]);
+            }
         }
 
-        Console.WriteLine(ranges.Sum(r => r[1] - r[0] + 1));
+
+        // exoected answer 352946349407338
+        Console.WriteLine(merged.Sum(r => r[1] - r[0] + 1));
     }
 }
