@@ -16,7 +16,7 @@ public partial class Part2(List<string> input)
         {
             if (merged.Count == 0)
             {
-                merged.Add(new[] { r[0], r[1] });
+                merged.Add([r[0], r[1]]);
                 continue;
             }
 

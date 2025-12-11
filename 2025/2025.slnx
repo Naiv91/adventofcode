@@ -4,4 +4,5 @@
   <Project Path="3/3.csproj" />
   <Project Path="4/4.csproj" />
   <Project Path="5/5.csproj" Id="64de0fd7-0120-45c4-aa08-2915f7931156" />
+  <Project Path="6/6.csproj" Id="d2a65d0b-d5e2-4ff9-98af-367d6e110c5b" />
 </Solution>
